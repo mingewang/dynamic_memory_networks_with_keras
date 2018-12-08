@@ -44,7 +44,8 @@ def load_embeddings_index(embeddings_path, emb_dim):
     """
 
     embeddings_index = {}
-    f = open(embeddings_path, 'r')
+    #f = open(embeddings_path, 'r')
+    f = open(embeddings_path, 'r').readlines()
     emb_dim = min(emb_dim+1, len(f[0].split()[1:])) # So that if emb_dim is larger, use the max available dim.
     for line in f:
         values = line.split()
@@ -52,7 +53,7 @@ def load_embeddings_index(embeddings_path, emb_dim):
         coefs = values[1:emb_dim]
         coefs = np.asarray(coefs, dtype='float32')
         embeddings_index[word] = coefs
-    f.close()
+    #f.close()
     embeddings_index["<eos>"] = np.random.rand(len(coefs))
     return embeddings_index
 

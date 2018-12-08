@@ -77,8 +77,6 @@ class DynamicMemoryNetwork():
             The training history as a keras callback object.
 
         """
-
-        opt = optimizers.Adam(lr=l_rate, decay=l_decay, clipvalue=10.)
         checkpoint = keras.callbacks.ModelCheckpoint(self.model_path,
                                                      monitor=save_criteria,
                                                      verbose=1,
@@ -100,11 +98,7 @@ class DynamicMemoryNetwork():
                                                 min_delta=1e-4
                                                 )
 
-        self.model.compile(
-            optimizer=opt,
-            loss="categorical_crossentropy",
-            metrics=["categorical_accuracy"])
-        print(f'Metrics: {self.model.metrics_names}')
+
         train_history = self.model.fit(x={'input_tensor': train_x,
                                           'question_tensor': train_q},
                                        y=train_y,
@@ -144,11 +138,19 @@ class DynamicMemoryNetwork():
         self.model = load_model(model_path)
         raise NotImplementedError
 
+    def load_weights(self, model_path):
+        self.model.load_weights(model_path)
+        return
+
     def predict(self, x, xq, batch_size=1):
         return self.model.predict([x, xq], batch_size=batch_size)
 
     def build_inference_graph(self, input_shape, question_shape, num_classes,
-                              units=256,batch_size=32, memory_steps=3, dropout=0.1, regularization_val=1e-4):
+                              units=256,batch_size=32, memory_steps=3, 
+                              l_rate=0.001,
+                              l_decay=0.0,
+                              dropout=0.1, regularization_val=1e-4,
+                              ):
         """Builds the model.
 
         Parameters
@@ -234,3 +236,13 @@ class DynamicMemoryNetwork():
                 inputs_tensor,
                 question_tensor],
             outputs=answer)
+
+        opt = optimizers.Adam(lr=l_rate, decay=l_decay, clipvalue=10.)
+
+        self.model.compile(
+            optimizer=opt,
+            loss="categorical_crossentropy",
+            metrics=["categorical_accuracy"])
+        print("Metrics: {}".format(self.model.metrics_names))
+
+        self.model.summary()
