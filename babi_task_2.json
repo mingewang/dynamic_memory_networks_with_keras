@@ -1,0 +1,18 @@
+{
+  "path_to_train_task": "/home/mwang/dl/babi/tasks_1-20_v1-2/en/qa2_two-supporting-facts_train.txt",
+  "path_to_test_task": "/home/mwang/dl/babi/tasks_1-20_v1-2/en/qa2_two-supporting-facts_test.txt",
+  
+  "path_to_embeddings": "/home/mwang/Development/comrite/books/deep_learning/sources/data/glove.6B/glove.6B.100d.txt",
+  "embeddings_size": 80,
+
+  "model_folder": "/home/mwang/dl/logs",
+  "hidden_units": 80,
+  "memory_steps": 3,
+
+  "epochs": 256,
+  "batch_size": 100,
+  "validation_split": 0.1,
+  "dropout": 0.1,
+  "learning_rate": 0.001,
+  "learning_decay": 0.0
+}
